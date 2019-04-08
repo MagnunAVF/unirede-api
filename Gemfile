@@ -7,6 +7,9 @@ gem 'pg', '>= 0.18', '< 2.0'
 gem 'puma', '~> 3.11'
 gem 'bootsnap', '>= 1.1.0', require: false
 
+# secure password store
+gem 'bcrypt'
+
 group :development, :test do
   gem 'pry-byebug'
   gem 'rspec-rails', '~> 3.8'

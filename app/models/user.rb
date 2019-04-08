@@ -1,7 +1,9 @@
 class User < ApplicationRecord
+  has_secure_password
+
   @@possible_access_levels = ["internal", "client", "admin"]
 
-  validates_presence_of :name, :email, :password, :access_level
+  validates_presence_of :name, :email, :password_digest, :access_level
   validates :email, email: true
   validate :in_possible_access_level
 
