@@ -40,6 +40,8 @@ RSpec.describe 'Users API', type: :request do
         returned_user = User.new(response_as_json)
 
         expect(response_as_json.keys).not_to include(:error)
+        expect(response_as_json.keys).not_to include(:password_digest)
+        expect(response_as_json.keys).not_to include(:password)
         expect(response_as_json).not_to be_empty
         expect(returned_user).to eq(user_in_db)
       end
