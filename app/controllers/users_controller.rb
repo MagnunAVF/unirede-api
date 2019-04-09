@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  before_action :set_user, only: [:show, :destroy]
+
   # GET /users
   def index
     @users = User.all
@@ -7,14 +9,11 @@ class UsersController < ApplicationController
 
   # GET /users/:id
   def show
-    @user = User.find(params[:id])
     json_response(@user)
   end
 
  # DELETE /users/:id
   def destroy
-    @user = User.find(params[:id])
-
     @user.destroy
 
     head :no_content
@@ -23,5 +22,9 @@ class UsersController < ApplicationController
   private
   def user_params
     params.permit(:name, :email, :password, :access_level)
+  end
+
+  def set_user
+    @user = User.find(params[:id])
   end
 end
