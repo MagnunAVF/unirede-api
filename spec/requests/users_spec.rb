@@ -58,4 +58,24 @@ RSpec.describe 'Users API', type: :request do
       end
     end
   end
+
+  context "DELETE /users/:id" do
+    context "when user exists in db" do
+      before { delete "/users/#{valid_user_id}" }
+
+      it "should return status code 204" do
+        expect(response).to have_http_status(204)
+      end
+    end
+
+    context "when user DOES NOT exists in db" do
+      let(:invalid_user_id) { Faker::Number.between(999, 9999) }
+
+      before { delete "/users/#{invalid_user_id}" }
+
+      it "should return status code 404" do
+        expect(response).to have_http_status(404)
+      end
+    end
+  end
 end
