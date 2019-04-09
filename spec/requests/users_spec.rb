@@ -3,6 +3,12 @@ require 'rails_helper'
 RSpec.describe 'Users API', type: :request do
   let!(:users) { create_list(:user, 5) }
   let(:valid_user_id) { users.last.id }
+  let(:invalid_user_id) { Faker::Number.between(999, 9999) }
+  let(:user_not_found_message) { /Couldn't find User/ }
+  let(:empty_password_message) { /Password can't be blank/ }
+  let(:invalid_access_level_message) {
+    /Access level must be in possible access levels list/
+  }
 
   context "GET /users" do
     before { get "/users" }
@@ -40,8 +46,6 @@ RSpec.describe 'Users API', type: :request do
     end
 
     context "when user DOES NOT exists in db" do
-      let(:invalid_user_id) { Faker::Number.between(999, 9999) }
-
       before { get "/users/#{invalid_user_id}" }
 
       it "should return status code 404" do
@@ -50,7 +54,7 @@ RSpec.describe 'Users API', type: :request do
 
       it 'should return an error indicator and a error message' do
         expect(response_as_json['error']).to eq(true)
-        expect(response_as_json['message']).to match(/Couldn't find User/)
+        expect(response_as_json['message']).to match(user_not_found_message)
       end
     end
   end
@@ -65,8 +69,6 @@ RSpec.describe 'Users API', type: :request do
     end
 
     context "when user DOES NOT exists in db" do
-      let(:invalid_user_id) { Faker::Number.between(999, 9999) }
-
       before { delete "/users/#{invalid_user_id}" }
 
       it "should return status code 404" do
@@ -117,9 +119,6 @@ RSpec.describe 'Users API', type: :request do
       end
 
       it 'should return an error indicator and a error message' do
-        empty_password_message = /Password can't be blank/
-        invalid_access_level_message = /Access level must be in possible access levels list/
-
         expect(response_as_json['error']).to eq(true)
         expect(response_as_json['message']).to match(empty_password_message)
         expect(response_as_json['message']).to match(invalid_access_level_message)
@@ -155,8 +154,6 @@ RSpec.describe 'Users API', type: :request do
         end
 
         it "should return an error indicator and a error message" do
-          invalid_access_level_message = /Access level must be in possible access levels list/
-
           expect(response_as_json['error']).to eq(true)
           expect(response_as_json['message']).to match(invalid_access_level_message)
         end
@@ -164,8 +161,6 @@ RSpec.describe 'Users API', type: :request do
     end
 
     context "when user DOES NOT exists in db" do
-      let(:invalid_user_id) { Faker::Number.between(999, 9999) }
-
       before { put "/users/#{invalid_user_id}" }
 
       it "should return status code 404" do
@@ -174,7 +169,7 @@ RSpec.describe 'Users API', type: :request do
 
       it 'should return an error indicator and a error message' do
         expect(response_as_json['error']).to eq(true)
-        expect(response_as_json['message']).to match(/Couldn't find User/)
+        expect(response_as_json['message']).to match(user_not_found_message)
       end
     end
   end
