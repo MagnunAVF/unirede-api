@@ -9,6 +9,8 @@ RSpec.describe User, type: :model do
     it { should validate_presence_of(:password_digest) }
     it { should validate_presence_of(:access_level) }
 
+    it { should have_secure_password }
+
     it "should validate the correct format of email attribute" do
       expect(valid_user.valid?).to eq(true)
 
