@@ -19,6 +19,12 @@ class UsersController < ApplicationController
     head :no_content
   end
 
+  # POST /users
+  def create
+    @user = User.create!(user_params)
+    json_response(@user, :created)
+  end
+
   private
   def user_params
     params.permit(:name, :email, :password, :access_level)
