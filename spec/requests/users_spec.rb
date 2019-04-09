@@ -126,4 +126,56 @@ RSpec.describe 'Users API', type: :request do
       end
     end
   end
+
+  context "PUT /users" do
+    context "when user exists in db" do
+      context "with valid parameters" do
+        let(:valid_params) { { name: Faker::Movies::VForVendetta.character } }
+
+        before { put "/users/#{valid_user_id}", params: valid_params }
+
+        it "should return status code 202" do
+          expect(response).to have_http_status(202)
+        end
+
+        it "should update the user" do
+          updated_user = User.find(valid_user_id)
+
+          expect(updated_user.name).to eq(valid_params[:name])
+        end
+      end
+
+      context "with NOT VALID parameters" do
+        let(:invalid_params) { { access_level: Faker::TvShows::GameOfThrones.house } }
+
+        before { put "/users/#{valid_user_id}", params: invalid_params }
+
+        it "should return status code 422" do
+          expect(response).to have_http_status(422)
+        end
+
+        it "should return an error indicator and a error message" do
+          invalid_access_level_message = /Access level must be in possible access levels list/
+
+          expect(response_as_json['error']).to eq(true)
+          expect(response_as_json['message']).to match(invalid_access_level_message)
+        end
+      end
+    end
+
+    context "when user DOES NOT exists in db" do
+      let(:invalid_user_id) { Faker::Number.between(999, 9999) }
+
+      before { put "/users/#{invalid_user_id}" }
+
+      it "should return status code 404" do
+        expect(response).to have_http_status(404)
+      end
+
+      it 'should return an error indicator and a error message' do
+        expect(response_as_json['error']).to eq(true)
+        expect(response_as_json['message']).to match(/Couldn't find User/)
+      end
+    end
+  end
 end
