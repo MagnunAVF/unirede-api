@@ -22,8 +22,14 @@ end
 
 ActiveRecord::Migration.maintain_test_schema!
 
+Dir[Rails.root.join('spec/helpers/**/*.rb')].each do |file|
+  require file
+end
+
 RSpec.configure do |config|
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
+
+  config.include RequestSpecHelper, type: :request
 
   config.use_transactional_fixtures = true
 

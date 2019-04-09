@@ -12,12 +12,11 @@ RSpec.describe 'Users API', type: :request do
     end
 
     it "should return all users" do
-      returned_json = JSON.parse(response.body)
-      array_of_returned_users = returned_json.map{ |element| User.new(element) }
+      array_of_returned_users = response_as_json.map{ |element| User.new(element) }
       all_users_in_db = User.all
 
-      expect(returned_json).not_to be_empty
-      expect(returned_json.size).to eq(5)
+      expect(response_as_json).not_to be_empty
+      expect(response_as_json.size).to eq(5)
       expect(array_of_returned_users).to eq(all_users_in_db)
     end
   end
@@ -31,12 +30,11 @@ RSpec.describe 'Users API', type: :request do
       end
 
       it "should return the correct user" do
-        returned_json = JSON.parse(response.body)
         user_in_db = User.find(valid_user_id)
-        returned_user = User.new(returned_json)
+        returned_user = User.new(response_as_json)
 
-        expect(returned_json.keys).not_to include(:error)
-        expect(returned_json).not_to be_empty
+        expect(response_as_json.keys).not_to include(:error)
+        expect(response_as_json).not_to be_empty
         expect(returned_user).to eq(user_in_db)
       end
     end
@@ -51,10 +49,8 @@ RSpec.describe 'Users API', type: :request do
       end
 
       it 'should return an error indicator and a error message' do
-        returned_json = JSON.parse(response.body)
-
-        expect(returned_json['error']).to eq(true)
-        expect(returned_json['message']).to match(/Couldn't find User/)
+        expect(response_as_json['error']).to eq(true)
+        expect(response_as_json['message']).to match(/Couldn't find User/)
       end
     end
   end
