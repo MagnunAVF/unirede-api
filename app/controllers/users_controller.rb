@@ -11,6 +11,15 @@ class UsersController < ApplicationController
     json_response(@user)
   end
 
+ # DELETE /users/:id
+  def destroy
+    @user = User.find(params[:id])
+
+    @user.destroy
+
+    head :no_content
+  end
+
   private
   def user_params
     params.permit(:name, :email, :password, :access_level)
