@@ -74,4 +74,56 @@ RSpec.describe 'Users API', type: :request do
       end
     end
   end
+
+  context "POST /users" do
+    context "when the request has valid parameters" do
+      let(:valid_params) {
+        {
+          name: Faker::Movies::LordOfTheRings.character,
+          email: Faker::Internet.free_email,
+          password: Faker::Internet.password(10),
+          access_level: 'admin'
+       }
+      }
+
+      before { post '/users', params: valid_params }
+
+      it "should return status code 201" do
+        expect(response).to have_http_status(201)
+      end
+
+      it "should create a new user" do
+        created_user = User.last
+
+        expect(created_user.name).to eq(valid_params[:name])
+        expect(created_user.email).to eq(valid_params[:email])
+        expect(created_user.access_level).to eq(valid_params[:access_level])
+      end
+    end
+
+    context "when the request has NOT VALID parameters" do
+      let(:invalid_params) {
+         {
+          name: Faker::Movies::LordOfTheRings.character,
+          email: Faker::Internet.free_email,
+          access_level: Faker::Movies::LordOfTheRings.location
+       }
+      }
+
+      before { post '/users', params: invalid_params }
+
+      it "should return status code 422" do
+        expect(response).to have_http_status(422)
+      end
+
+      it 'should return an error indicator and a error message' do
+        empty_password_message = /Password can't be blank/
+        invalid_access_level_message = /Access level must be in possible access levels list/
+
+        expect(response_as_json['error']).to eq(true)
+        expect(response_as_json['message']).to match(empty_password_message)
+        expect(response_as_json['message']).to match(invalid_access_level_message)
+      end
+    end
+  end
 end
