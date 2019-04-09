@@ -2,8 +2,9 @@ help:
 	@echo 'Makefile for Unirede-API                                              '
 	@echo '                                                                      '
 	@echo 'Usage:                                                                '
+	@echo '   run                     Run api in localhost:3000                  '
 	@echo '   setup                   Install all dependencies to dev            '
-	@echo '   db_clean                Delete all DBs and create new ones         '
+	@echo '   db-clean                Delete all DBs and create new ones         '
 	@echo '   reset                   Clean all dbs, all assets and setup again  '
 	@echo '   test                    Run all tests                              '
 	@echo '   test-cov                Run all tests with coverage result         '
@@ -11,16 +12,19 @@ help:
 
 setup:
 	bundle install
-	@make db_create
+	@make db-create
+
+run:
+	rails s -p 3000
 
 reset:
-	@make db_clean
+	@make db-clean
 
-db_clean:
+db-clean:
 	bundle exec rake db:drop
-	@make db_create
+	@make db-create
 
-db_create:
+db-create:
 	bundle exec rake db:create
 	bundle exec rake db:migrate
 	bundle exec rake db:seed
@@ -35,4 +39,4 @@ test-cov:
 auto-test:
 	bundle exec guard
 
-.PHONY: help, setup, clean, test, test-cov, auto-test
+.PHONY: help, setup, run, clean, test, test-cov, auto-test
