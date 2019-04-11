@@ -10,6 +10,8 @@ gem 'bootsnap', '>= 1.1.0', require: false
 # secure password store
 gem 'bcrypt'
 
+gem 'rack-cors', require: 'rack/cors'
+
 group :development, :test do
   gem 'pry-byebug'
   gem 'rspec-rails', '~> 3.8'
