@@ -51,6 +51,7 @@ For test coverage with results (in Linux), run:
 ```
 make test-cov
 ```
+This app has 100% of tests coverage.
 
 ## Deployment
 
