@@ -15,7 +15,7 @@ setup:
 	@make db-create
 
 run:
-	rails s -p 3000
+	rails s -p 4000
 
 reset:
 	@make db-clean
