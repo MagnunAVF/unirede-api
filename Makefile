@@ -2,7 +2,7 @@ help:
 	@echo 'Makefile for Unirede-API                                              '
 	@echo '                                                                      '
 	@echo 'Usage:                                                                '
-	@echo '   run                     Run api in localhost:3000                  '
+	@echo '   run                     Run api in localhost:4000                  '
 	@echo '   setup                   Install all dependencies to dev            '
 	@echo '   db-clean                Delete all DBs and create new ones         '
 	@echo '   reset                   Clean all dbs, all assets and setup again  '
